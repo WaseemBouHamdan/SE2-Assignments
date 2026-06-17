@@ -1,6 +1,0 @@
-{"level":"info","message":"Successfully parsed JSON file: C:\\Users\\User\\Desktop\\Wassim SE2\\src\\data\\book orders.json","timestamp":"2026-06-16 21:10:17"}
-{"level":"info","message":"Successfully parsed CSV file: C:\\Users\\User\\Desktop\\Wassim SE2\\src\\data\\cake orders.csv","timestamp":"2026-06-16 21:10:17"}
-{"level":"error","message":"Error parsing JSON file at C:\\Users\\User\\Desktop\\Wassim SE2\\src\\data\\missing.json: ENOENT: no such file or directory, open 'C:\\Users\\User\\Desktop\\Wassim SE2\\src\\data\\missing.json'","timestamp":"2026-06-16 21:10:17"}
-{"level":"error","message":"Error while reading the stream of File C:\\Users\\User\\Desktop\\Wassim SE2\\src\\data\\missing.csv, ENOENT: no such file or directory, open 'C:\\Users\\User\\Desktop\\Wassim SE2\\src\\data\\missing.csv'","timestamp":"2026-06-16 21:10:17"}
-{"level":"info","message":"Successfully parsed XML file: C:\\Users\\User\\Desktop\\Wassim SE2\\src\\data\\toy orders.xml","timestamp":"2026-06-16 21:10:17"}
-{"level":"error","message":"Error parsing XML file at C:\\Users\\User\\Desktop\\Wassim SE2\\src\\data\\missing.xml: ENOENT: no such file or directory, open 'C:\\Users\\User\\Desktop\\Wassim SE2\\src\\data\\missing.xml'","timestamp":"2026-06-16 21:10:17"}
