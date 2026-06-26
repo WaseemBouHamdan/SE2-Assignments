@@ -1,14 +1,19 @@
 import { IRepository } from "./IRepository";
 import { Toy } from "../models/Toy";
-import { ToyMapper } from "../mappers/ToyMapper";
+import { MapperFactory } from "../factories/MapperFactory";
+import { ItemCategory } from "../enums/ItemCategory";
 import { pool } from "../database/db";
+import { IMapper } from "../mappers/IMapper";
 
 export class ToyRepository implements IRepository<Toy> {
-  private mapper = new ToyMapper();
-
+  // Centralized instantiation via MapperFactory
+  private mapper = MapperFactory.createMapper(ItemCategory.TOY) as IMapper<
+    any,
+    Toy
+  >;
   async load(): Promise<Toy[]> {
     const { rows } = await pool.query("SELECT * FROM toys");
-    return rows.map((row) => this.mapper.map(row));
+    return rows.map((row) => this.mapper.map(row) as Toy);
   }
 
   async save(toy: Toy): Promise<void> {
