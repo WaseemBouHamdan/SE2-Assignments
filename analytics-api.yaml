@@ -1,0 +1,106 @@
+openapi: 3.0.0
+info:
+  title: E-Commerce Analytics API
+  version: 1.0.0
+  description: Business intelligence endpoints for monitoring sales, orders, and product performance.
+servers:
+  - url: http://localhost:8000/api/v1
+    description: Local development server
+
+paths:
+  /analytics/orders/summary:
+    get:
+      summary: Get total orders and overall revenue
+      description: Returns the total number of orders ever created and the gross revenue generated.
+      responses:
+        "200":
+          description: Successful request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalOrders:
+                    type: integer
+                    example: 1245
+                  totalRevenue:
+                    type: number
+                    format: float
+                    example: 45230.50
+        "500":
+          description: Internal server error
+
+  /analytics/items/breakdown:
+    get:
+      summary: Get order count and revenue broken down by item type
+      description: Returns a list of item categories (e.g., CAKE, BOOK, TOY) with their specific order counts and generated revenue.
+      parameters:
+        - name: sort
+          in: query
+          description: Sort the breakdown by revenue or count (e.g., -revenue for descending)
+          required: false
+          schema:
+            type: string
+            example: "-revenue"
+      responses:
+        "200":
+          description: Successful request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    itemType:
+                      type: string
+                      example: "TOY"
+                    orderCount:
+                      type: integer
+                      example: 450
+                    categoryRevenue:
+                      type: number
+                      format: float
+                      example: 15400.75
+        "500":
+          description: Internal server error
+
+  /analytics/orders/average-value:
+    get:
+      summary: Get the Average Order Value (AOV)
+      description: (Additional Metric 1) Calculates the average amount spent per individual order.
+      responses:
+        "200":
+          description: Successful request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  averageOrderValue:
+                    type: number
+                    format: float
+                    example: 36.33
+        "500":
+          description: Internal server error
+
+  /analytics/items/top-selling:
+    get:
+      summary: Get the highest performing product category
+      description: (Additional Metric 2) Returns the item category with the highest total sales volume.
+      responses:
+        "200":
+          description: Successful request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  topCategory:
+                    type: string
+                    example: "BOOK"
+                  totalUnitsSold:
+                    type: integer
+                    example: 890
+        "500":
+          description: Internal server error
