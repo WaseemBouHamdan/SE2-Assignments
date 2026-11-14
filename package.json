@@ -3,6 +3,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "csv-parse": "^7.0.3",
     "winston": "^3.19.0",
     "xml2js": "^0.6.2"
   },
