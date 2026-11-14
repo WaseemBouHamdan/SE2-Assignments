@@ -1,7 +1,9 @@
 import fs from "fs/promises";
 import logger from "../utils/logger"; // Assuming your Winston logger is here based on the video
 
-export const parseJSON = async (filePath: string): Promise<any> => {
+export const parseJSON = async (
+  filePath: string,
+): Promise<Record<string, unknown>[]> => {
   try {
     const rawData = await fs.readFile(filePath, "utf-8");
     const parsedData = JSON.parse(rawData);
