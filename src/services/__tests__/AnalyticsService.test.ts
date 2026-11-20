@@ -3,7 +3,6 @@ import { RepositoryFactory } from "../../factories/RepositoryFactory";
 import { ItemCategory } from "../../enums/ItemCategory";
 import { CakeBuilder } from "../../models/Cake";
 import { BookBuilder } from "../../models/Book";
-import { ToyBuilder } from "../../models/Toy";
 
 jest.mock("../../factories/RepositoryFactory");
 
@@ -49,8 +48,8 @@ describe("AnalyticsService", () => {
         new BookBuilder()
           .setTitle("Clean Code")
           .setAuthor("Robert C. Martin")
-          .setPages(464)
-          .setIsbn("978-0132350884")
+          .setGenre("Software Engineering")
+          .setFormat("Paperback")
           .setPrice(30)
           .setQuantity(1)
           .build(),
@@ -87,14 +86,12 @@ describe("AnalyticsService", () => {
 
   it("should calculate the average order value (AOV)", async () => {
     const aov = await analyticsService.getAverageOrderValue();
-    // 85 Total Revenue / 3 Total Orders = 28.333...
     expect(aov).toBeCloseTo(28.33);
   });
 
   it("should identify the top selling category", async () => {
     const topCategory = await analyticsService.getTopSellingCategory();
 
-    // Cakes have the highest count (2)
     expect(topCategory?.itemType).toBe(ItemCategory.CAKE);
     expect(topCategory?.orderCount).toBe(2);
   });

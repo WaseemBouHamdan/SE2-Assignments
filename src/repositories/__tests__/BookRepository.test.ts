@@ -11,8 +11,8 @@ describe("BookRepository CRUD and Edge Cases", () => {
   const mockBook = new BookBuilder()
     .setTitle("1984")
     .setAuthor("George Orwell")
-    .setPages(328)
-    .setIsbn("978-0451524935")
+    .setGenre("Dystopian")
+    .setFormat("Paperback")
     .build();
 
   beforeEach(() => {
@@ -26,8 +26,8 @@ describe("BookRepository CRUD and Edge Cases", () => {
         id: "1",
         title: "1984",
         author: "George Orwell",
-        pages: 328,
-        isbn: "978-0451524935",
+        genre: "Dystopian",
+        format: "Paperback",
       },
     ];
     (pool.query as jest.Mock).mockResolvedValueOnce({ rows: mockRows });
@@ -35,6 +35,7 @@ describe("BookRepository CRUD and Edge Cases", () => {
     const books = await repo.load();
     expect(pool.query).toHaveBeenCalledWith("SELECT * FROM books");
     expect(books[0].getTitle()).toBe("1984");
+    expect(books[0].getGenre()).toBe("Dystopian");
   });
 
   it("should successfully save a book", async () => {

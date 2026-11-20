@@ -1,37 +1,37 @@
 import { IMapper } from "./IMapper";
 import { Book, BookBuilder } from "../models/Book";
 
-export class BookMapper implements IMapper<any, Book> {
-  map(data: any): Book {
+export type MapperInput = string[] | Record<string, string>;
+
+export class BookMapper implements IMapper<MapperInput, Book> {
+  map(data: MapperInput): Book {
     const builder = new BookBuilder();
 
     if (Array.isArray(data)) {
-      // CSV format: [id, title, author, pages, isbn]
       return builder
-        .setTitle(data[1])
-        .setAuthor(data[2])
-        .setPages(parseInt(data[3], 10))
-        .setIsbn(data[4])
+        .setTitle(data[1] || "")
+        .setAuthor(data[2] || "")
+        .setGenre(data[3] || "")
+        .setFormat(data[4] || "")
         .build();
     } else if (typeof data === "object" && data !== null) {
-      // JSON/XML format
       return builder
-        .setTitle(data.title)
-        .setAuthor(data.author)
-        .setPages(parseInt(data.pages, 10))
-        .setIsbn(data.isbn)
+        .setTitle(data["Book Title"] || data.title || "")
+        .setAuthor(data["Author"] || data.author || "")
+        .setGenre(data["Genre"] || data.genre || "")
+        .setFormat(data["Format"] || data.format || "")
         .build();
     }
 
     throw new Error("Invalid data format provided to Mapper");
   }
 
-  reverseMap(data: Book): any {
+  reverseMap(data: Book): Record<string, unknown> {
     return {
-      title: data.getTitle(),
-      author: data.getAuthor(),
-      pages: data.getPages(),
-      isbn: data.getIsbn(),
+      "Book Title": data.getTitle(),
+      Author: data.getAuthor(),
+      Genre: data.getGenre(),
+      Format: data.getFormat(),
     };
   }
 }
