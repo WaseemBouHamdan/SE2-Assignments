@@ -5,12 +5,23 @@ export class Book implements Item {
   private author: string;
   private pages: number;
   private isbn: string;
+  private price: number;
+  private quantity: number;
 
-  constructor(title: string, author: string, pages: number, isbn: string) {
+  constructor(
+    title: string,
+    author: string,
+    pages: number,
+    isbn: string,
+    price: number = 0,
+    quantity: number = 1,
+  ) {
     this.title = title;
     this.author = author;
     this.pages = pages;
     this.isbn = isbn;
+    this.price = price;
+    this.quantity = quantity;
   }
 
   getCategory(): ItemCategory {
@@ -28,6 +39,12 @@ export class Book implements Item {
   getIsbn(): string {
     return this.isbn;
   }
+  getPrice(): number {
+    return this.price;
+  }
+  getQuantity(): number {
+    return this.quantity;
+  }
 }
 
 export class BookBuilder {
@@ -35,6 +52,8 @@ export class BookBuilder {
   private author?: string;
   private pages?: number;
   private isbn?: string;
+  private price: number = 0;
+  private quantity: number = 1;
 
   setTitle(title: string): BookBuilder {
     this.title = title;
@@ -56,10 +75,27 @@ export class BookBuilder {
     return this;
   }
 
+  setPrice(price: number): BookBuilder {
+    this.price = price;
+    return this;
+  }
+
+  setQuantity(quantity: number): BookBuilder {
+    this.quantity = quantity;
+    return this;
+  }
+
   build(): Book {
     if (!this.title || !this.author || this.pages === undefined || !this.isbn) {
       throw new Error("Missing required fields to build Book");
     }
-    return new Book(this.title, this.author, this.pages, this.isbn);
+    return new Book(
+      this.title,
+      this.author,
+      this.pages,
+      this.isbn,
+      this.price,
+      this.quantity,
+    );
   }
 }

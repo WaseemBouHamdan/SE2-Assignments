@@ -6,4 +6,6 @@ export enum ItemCategory {
 
 export interface Item {
   getCategory(): ItemCategory;
+  getPrice(): number;
+  getQuantity(): number;
 }

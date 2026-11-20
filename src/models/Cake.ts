@@ -5,12 +5,23 @@ export class Cake implements Item {
   private flavor: string;
   private filling: string;
   private size: number;
+  private price: number;
+  private quantity: number;
 
-  constructor(type: string, flavor: string, filling: string, size: number) {
+  constructor(
+    type: string,
+    flavor: string,
+    filling: string,
+    size: number,
+    price: number = 0,
+    quantity: number = 1,
+  ) {
     this.type = type;
     this.flavor = flavor;
     this.filling = filling;
     this.size = size;
+    this.price = price;
+    this.quantity = quantity;
   }
 
   getCategory(): ItemCategory {
@@ -28,6 +39,12 @@ export class Cake implements Item {
   getSize(): number {
     return this.size;
   }
+  getPrice(): number {
+    return this.price;
+  }
+  getQuantity(): number {
+    return this.quantity;
+  }
 }
 
 export class CakeBuilder {
@@ -35,6 +52,8 @@ export class CakeBuilder {
   private flavor?: string;
   private filling?: string;
   private size?: number;
+  private price: number = 0;
+  private quantity: number = 1;
 
   setType(type: string): CakeBuilder {
     this.type = type;
@@ -56,6 +75,16 @@ export class CakeBuilder {
     return this;
   }
 
+  setPrice(price: number): CakeBuilder {
+    this.price = price;
+    return this;
+  }
+
+  setQuantity(quantity: number): CakeBuilder {
+    this.quantity = quantity;
+    return this;
+  }
+
   build(): Cake {
     if (
       !this.type ||
@@ -65,6 +94,13 @@ export class CakeBuilder {
     ) {
       throw new Error("Missing required fields to build Cake");
     }
-    return new Cake(this.type, this.flavor, this.filling, this.size);
+    return new Cake(
+      this.type,
+      this.flavor,
+      this.filling,
+      this.size,
+      this.price,
+      this.quantity,
+    );
   }
 }
