@@ -27,6 +27,10 @@ paths:
                     type: number
                     format: float
                     example: 45230.50
+        "401":
+          description: Unauthorized - Missing or invalid authentication credentials
+        "403":
+          description: Forbidden - Insufficient permissions to access this resource
         "500":
           description: Internal server error
 
@@ -62,6 +66,10 @@ paths:
                       type: number
                       format: float
                       example: 15400.75
+        "401":
+          description: Unauthorized - Missing or invalid authentication credentials
+        "403":
+          description: Forbidden - Insufficient permissions to access this resource
         "500":
           description: Internal server error
 
@@ -81,6 +89,10 @@ paths:
                     type: number
                     format: float
                     example: 36.33
+        "401":
+          description: Unauthorized - Missing or invalid authentication credentials
+        "403":
+          description: Forbidden - Insufficient permissions to access this resource
         "500":
           description: Internal server error
 
@@ -102,5 +114,9 @@ paths:
                   totalUnitsSold:
                     type: integer
                     example: 890
+        "401":
+          description: Unauthorized - Missing or invalid authentication credentials
+        "403":
+          description: Forbidden - Insufficient permissions to access this resource
         "500":
           description: Internal server error
