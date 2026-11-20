@@ -9,18 +9,15 @@ describe("AnalyticsController", () => {
   let mockRes: Partial<Response>;
 
   beforeEach(() => {
-    // 1. Mock the Service Layer (we only define the methods the controller uses)
     mockAnalyticsService = {
       getSummary: jest.fn(),
       getBreakdown: jest.fn(),
     };
 
-    // 2. Inject the mock service into the controller
     analyticsController = new AnalyticsController(
       mockAnalyticsService as AnalyticsService,
     );
 
-    // 3. Mock Express Request and Response objects
     mockReq = { query: {} };
     mockRes = {
       status: jest.fn().mockReturnThis(),
@@ -79,23 +76,25 @@ describe("AnalyticsController", () => {
       );
 
       expect(mockRes.status).toHaveBeenCalledWith(200);
-      // It should strip out the revenue data and only return itemType and orderCount
       expect(mockRes.json).toHaveBeenCalledWith([
         { itemType: "CAKE", orderCount: 10 },
         { itemType: "BOOK", orderCount: 50 },
       ]);
     });
 
-    it("should throw an error if an invalid sort parameter is provided", async () => {
+    it("should return a 400 response if an invalid sort parameter is provided", async () => {
       mockReq.query = { sort: "invalid_sort" };
 
-      // Because there is no try/catch in the controller, it returns a rejected promise
-      await expect(
-        analyticsController.getOrderCountsByType(
-          mockReq as Request,
-          mockRes as Response,
-        ),
-      ).rejects.toThrow("Invalid sort parameter. Use 'count' or '-count'.");
+      await analyticsController.getOrderCountsByType(
+        mockReq as Request,
+        mockRes as Response,
+      );
+
+      expect(mockRes.status).toHaveBeenCalledWith(400);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        error: "Invalid sort parameter. Use 'count' or '-count'.",
+      });
+      expect(mockAnalyticsService.getBreakdown).not.toHaveBeenCalled();
     });
   });
 
@@ -124,15 +123,19 @@ describe("AnalyticsController", () => {
       ]);
     });
 
-    it("should throw an error if an invalid sort parameter is provided", async () => {
+    it("should return a 400 response if an invalid sort parameter is provided", async () => {
       mockReq.query = { sort: "bad_param" };
 
-      await expect(
-        analyticsController.getRevenueBreakdownByType(
-          mockReq as Request,
-          mockRes as Response,
-        ),
-      ).rejects.toThrow("Invalid sort parameter. Use 'revenue' or '-revenue'.");
+      await analyticsController.getRevenueBreakdownByType(
+        mockReq as Request,
+        mockRes as Response,
+      );
+
+      expect(mockRes.status).toHaveBeenCalledWith(400);
+      expect(mockRes.json).toHaveBeenCalledWith({
+        error: "Invalid sort parameter. Use 'revenue' or '-revenue'.",
+      });
+      expect(mockAnalyticsService.getBreakdown).not.toHaveBeenCalled();
     });
   });
 });

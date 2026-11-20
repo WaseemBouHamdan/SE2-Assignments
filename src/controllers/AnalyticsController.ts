@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { AnalyticsService } from "../services/AnalyticsService";
 
 export class AnalyticsController {
-  // Dependency Injection: The controller relies on the service for business logic.
   constructor(private readonly analyticsService: AnalyticsService) {}
 
   public async getTotalOrders(req: Request, res: Response): Promise<void> {
@@ -19,22 +18,22 @@ export class AnalyticsController {
     req: Request,
     res: Response,
   ): Promise<void> {
-    let breakdown = await this.analyticsService.getBreakdown();
-
-    // Extract and validate query parameters
     const sort = req.query.sort as string;
     if (sort && sort !== "-count" && sort !== "count") {
-      throw new Error("Invalid sort parameter. Use 'count' or '-count'.");
+      res.status(400).json({
+        error: "Invalid sort parameter. Use 'count' or '-count'.",
+      });
+      return;
     }
 
-    // Apply sorting logic if requested
+    let breakdown = await this.analyticsService.getBreakdown();
+
     if (sort === "-count") {
       breakdown = breakdown.sort((a, b) => b.orderCount - a.orderCount);
     } else if (sort === "count") {
       breakdown = breakdown.sort((a, b) => a.orderCount - b.orderCount);
     }
 
-    // Format response according to API design (hiding revenue for this specific endpoint)
     const result = breakdown.map((b) => ({
       itemType: b.itemType,
       orderCount: b.orderCount,
@@ -47,15 +46,16 @@ export class AnalyticsController {
     req: Request,
     res: Response,
   ): Promise<void> {
-    let breakdown = await this.analyticsService.getBreakdown();
-
-    // Extract and validate query parameters
     const sort = req.query.sort as string;
     if (sort && sort !== "-revenue" && sort !== "revenue") {
-      throw new Error("Invalid sort parameter. Use 'revenue' or '-revenue'.");
+      res.status(400).json({
+        error: "Invalid sort parameter. Use 'revenue' or '-revenue'.",
+      });
+      return;
     }
 
-    // Apply sorting logic if requested
+    let breakdown = await this.analyticsService.getBreakdown();
+
     if (sort === "-revenue") {
       breakdown = breakdown.sort(
         (a, b) => b.categoryRevenue - a.categoryRevenue,
@@ -66,7 +66,6 @@ export class AnalyticsController {
       );
     }
 
-    // Format response according to API design (hiding counts for this specific endpoint)
     const result = breakdown.map((b) => ({
       itemType: b.itemType,
       categoryRevenue: b.categoryRevenue,
