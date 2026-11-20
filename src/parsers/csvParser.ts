@@ -16,6 +16,15 @@ export const parseCSV = (filePath: string): Promise<string[][]> => {
       skip_empty_lines: true,
     });
 
+    const handleError = (error: Error) => {
+      logger.error(
+        `Error while reading the stream of File ${filePath}, ${error.message}`,
+      );
+      reject(error);
+    };
+
+    readStream.on("error", handleError);
+
     readStream
       .pipe(parser)
       .on("data", (data: string[]) => {
@@ -25,11 +34,6 @@ export const parseCSV = (filePath: string): Promise<string[][]> => {
         logger.info(`Successfully parsed CSV file: ${filePath}`);
         resolve(results);
       })
-      .on("error", (error: Error) => {
-        logger.error(
-          `Error while reading the stream of File ${filePath}, ${error.message}`,
-        );
-        reject(error);
-      });
+      .on("error", handleError);
   });
 };

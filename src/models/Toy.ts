@@ -5,17 +5,23 @@ export class Toy implements Item {
   private brand: string;
   private recommendedAge: number;
   private material: string;
+  private price: number;
+  private quantity: number;
 
   constructor(
     name: string,
     brand: string,
     recommendedAge: number,
     material: string,
+    price: number = 0,
+    quantity: number = 1,
   ) {
     this.name = name;
     this.brand = brand;
     this.recommendedAge = recommendedAge;
     this.material = material;
+    this.price = price;
+    this.quantity = quantity;
   }
 
   getCategory(): ItemCategory {
@@ -33,6 +39,12 @@ export class Toy implements Item {
   getMaterial(): string {
     return this.material;
   }
+  getPrice(): number {
+    return this.price;
+  }
+  getQuantity(): number {
+    return this.quantity;
+  }
 }
 
 export class ToyBuilder {
@@ -40,6 +52,8 @@ export class ToyBuilder {
   private brand?: string;
   private recommendedAge?: number;
   private material?: string;
+  private price: number = 0;
+  private quantity: number = 1;
 
   setName(name: string): ToyBuilder {
     this.name = name;
@@ -61,6 +75,16 @@ export class ToyBuilder {
     return this;
   }
 
+  setPrice(price: number): ToyBuilder {
+    this.price = price;
+    return this;
+  }
+
+  setQuantity(quantity: number): ToyBuilder {
+    this.quantity = quantity;
+    return this;
+  }
+
   build(): Toy {
     if (
       !this.name ||
@@ -70,6 +94,13 @@ export class ToyBuilder {
     ) {
       throw new Error("Missing required fields to build Toy");
     }
-    return new Toy(this.name, this.brand, this.recommendedAge, this.material);
+    return new Toy(
+      this.name,
+      this.brand,
+      this.recommendedAge,
+      this.material,
+      this.price,
+      this.quantity,
+    );
   }
 }
