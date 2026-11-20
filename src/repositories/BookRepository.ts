@@ -3,32 +3,29 @@ import { Book } from "../models/Book";
 import { MapperFactory } from "../factories/MapperFactory";
 import { ItemCategory } from "../enums/ItemCategory";
 import { pool } from "../database/db";
-import { IMapper } from "../mappers/IMapper";
 
 export class BookRepository implements IRepository<Book> {
   // Centralized instantiation via MapperFactory
-  private mapper = MapperFactory.createMapper(ItemCategory.BOOK) as IMapper<
-    any,
-    Book
-  >;
+  private mapper = MapperFactory.createMapper(ItemCategory.BOOK);
+
   async load(): Promise<Book[]> {
     const { rows } = await pool.query("SELECT * FROM books");
-    return rows.map((row) => this.mapper.map(row) as Book);
+    return rows.map((row) => this.mapper.map(row));
   }
 
   async save(book: Book): Promise<void> {
     const data = this.mapper.reverseMap(book);
     await pool.query(
-      "INSERT INTO books (id, title, author, pages, isbn) VALUES ($1, $2, $3, $4, $5)",
-      [data.id, data.title, data.author, data.pages, data.isbn],
+      "INSERT INTO books (title, author, genre, format) VALUES ($1, $2, $3, $4)",
+      [data["Book Title"], data.Author, data.Genre, data.Format],
     );
   }
 
   async update(id: string, book: Book): Promise<void> {
     const data = this.mapper.reverseMap(book);
     await pool.query(
-      "UPDATE books SET title=$1, author=$2, pages=$3, isbn=$4 WHERE id=$5",
-      [data.title, data.author, data.pages, data.isbn, id],
+      "UPDATE books SET title=$1, author=$2, genre=$3, format=$4 WHERE id=$5",
+      [data["Book Title"], data.Author, data.Genre, data.Format, id],
     );
   }
 

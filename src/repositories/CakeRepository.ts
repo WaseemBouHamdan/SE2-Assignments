@@ -3,17 +3,14 @@ import { Cake } from "../models/Cake";
 import { MapperFactory } from "../factories/MapperFactory";
 import { ItemCategory } from "../enums/ItemCategory";
 import { pool } from "../database/db";
-import { IMapper } from "../mappers/IMapper";
 
 export class CakeRepository implements IRepository<Cake> {
   // Centralized instantiation via MapperFactory
-  private mapper = MapperFactory.createMapper(ItemCategory.CAKE) as IMapper<
-    any,
-    Cake
-  >;
+  private mapper = MapperFactory.createMapper(ItemCategory.CAKE);
+
   async load(): Promise<Cake[]> {
     const { rows } = await pool.query("SELECT * FROM cakes");
-    return rows.map((row) => this.mapper.map(row) as Cake);
+    return rows.map((row) => this.mapper.map(row));
   }
 
   async save(cake: Cake): Promise<void> {
