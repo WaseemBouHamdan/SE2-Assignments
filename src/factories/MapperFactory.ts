@@ -8,7 +8,15 @@ import { Book } from "../models/Book";
 import { Toy } from "../models/Toy";
 
 export class MapperFactory {
-  public static createMapper(category: ItemCategory) {
+  public static createMapper(category: ItemCategory.CAKE): IMapper<any, Cake>;
+  public static createMapper(category: ItemCategory.BOOK): IMapper<any, Book>;
+  public static createMapper(category: ItemCategory.TOY): IMapper<any, Toy>;
+  public static createMapper(
+    category: ItemCategory,
+  ): IMapper<any, Cake> | IMapper<any, Book> | IMapper<any, Toy>;
+  public static createMapper(
+    category: ItemCategory,
+  ): IMapper<any, Cake> | IMapper<any, Book> | IMapper<any, Toy> {
     switch (category) {
       case ItemCategory.CAKE:
         return new CakeMapper();

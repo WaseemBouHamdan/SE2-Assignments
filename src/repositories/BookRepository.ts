@@ -3,17 +3,14 @@ import { Book } from "../models/Book";
 import { MapperFactory } from "../factories/MapperFactory";
 import { ItemCategory } from "../enums/ItemCategory";
 import { pool } from "../database/db";
-import { IMapper } from "../mappers/IMapper";
 
 export class BookRepository implements IRepository<Book> {
   // Centralized instantiation via MapperFactory
-  private mapper = MapperFactory.createMapper(ItemCategory.BOOK) as IMapper<
-    any,
-    Book
-  >;
+  private mapper = MapperFactory.createMapper(ItemCategory.BOOK);
+
   async load(): Promise<Book[]> {
     const { rows } = await pool.query("SELECT * FROM books");
-    return rows.map((row) => this.mapper.map(row) as Book);
+    return rows.map((row) => this.mapper.map(row));
   }
 
   async save(book: Book): Promise<void> {
